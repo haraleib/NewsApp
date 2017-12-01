@@ -1,0 +1,20 @@
+<resources>
+    <string name="title_activity_login_register">Sign in</string>
+    <!-- Strings related to homeScreen -->
+    <string name="login_text">Anmelden</string>
+    <string name="news_text">News</string>
+    <string name="register_text">Registrierung</string>
+    <string name="empty_text">Empty</string>
+    <string name="drop_component">Drop Component</string>
+    <string name="reg">Drop Component</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Passwort (optional)</string>
+    <string name="action_sign_in">Anmelden oder registrieren</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">Email Adresse ungültig</string>
+    <string name="error_invalid_password">Passwort zu kurz</string>
+    <string name="error_incorrect_password">Ungültiges Passwort</string>
+    <string name="error_field_required">Verpflichtende Eingabe</string>
+    <string name="permission_rationale">"Für die Bereitstellung von E-Mail-Vervollständigungen sind Kontakteberechtigungen erforderlich."</string>
+</resources>

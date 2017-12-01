@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import at.nachrichten.newsapp.textToSpeech.TextToSpeechExtended;
 
 import java.util.Locale;
 
@@ -21,48 +22,66 @@ import at.nachrichten.newsapp.Messages;
  * Created by hei on 20.10.2017.
  */
 
-public class DragListener implements View.OnDragListener, TextToSpeech.OnInitListener {
+public class DragListener implements View.OnDragListener {
 
     private Activity activity;
     private Context context;
     private Drawable enterShape;
     private Drawable normalShape;
-    private TextToSpeech tts;
+    private TextToSpeechExtended tts;
     private final int NO_TEXT_VIEW_ID = 0;
 
-    public DragListener(Context context,@DrawableRes int RDrawableResource, @DrawableRes int RDrawableResourceNormalShape){
+    public DragListener(Context context, @DrawableRes int RDrawableResource, @DrawableRes int RDrawableResourceNormalShape) {
         this.activity = (Activity) context;
         this.context = context;
         this.enterShape = context.getDrawable(RDrawableResource);
         this.normalShape = context.getDrawable(RDrawableResourceNormalShape);
-        this.tts = new TextToSpeech(context, this);
+        this.tts = new TextToSpeechExtended(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+
+                    int result = tts.setLanguage(Locale.US);
+
+                    if (result == TextToSpeech.LANG_MISSING_DATA
+                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Log.e("TTS", "This Language is not supported");
+                    } else {
+                        tts.firstUseOfApp();
+                    }
+
+                } else {
+                    Log.e("TTS", "Initilization Failed!");
+                }
+            }
+        });
     }
 
-    public DragListener(Context context, @DrawableRes int RDrawableResource, @DrawableRes int RDrawableResourceNormalShape, TextToSpeech tts){
+    public DragListener(Context context, @DrawableRes int RDrawableResource, @DrawableRes int RDrawableResourceNormalShape, TextToSpeech tts) {
         this.activity = (Activity) context;
         this.context = context;
         this.enterShape = context.getDrawable(RDrawableResource);
         this.normalShape = context.getDrawable(RDrawableResourceNormalShape);
-     //   this.tts = tts;
+        //   this.tts = tts;
     }
 
     public boolean onDrag(View v, DragEvent event) {
         int action = event.getAction();
         View rootView = activity.findViewById(android.R.id.content);
-        Context context =  activity.getBaseContext();
+        Context context = activity.getBaseContext();
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
                 v.setBackground(enterShape);
 
-                if(rootView.findViewById(v.getId()) != null){
+                if (rootView.findViewById(v.getId()) != null) {
                     String textViewName = rootView.getResources().getResourceEntryName(v.getId());
                     int id = this.context.getResources().getIdentifier(textViewName, "id", this.context.getPackageName());
-                    if(id != NO_TEXT_VIEW_ID && rootView.findViewById(id) instanceof TextView) {
+                    if (id != NO_TEXT_VIEW_ID && rootView.findViewById(id) instanceof TextView) {
                         TextView tv = (TextView) rootView.findViewById(id);
                         String readTextView = tv.getText().toString();
-                        speakOut(readTextView);
+                        tts.speakOut(readTextView);
                     }
                 }
 
@@ -79,20 +98,21 @@ public class DragListener implements View.OnDragListener, TextToSpeech.OnInitLis
                 View view = (View) event.getLocalState(); //ImageView
                 ViewGroup owner = (ViewGroup) view.getParent(); //FrameLayout
 
-                if(v instanceof TextView){
-                 clazzName  = rootView.getResources().getResourceEntryName(v.getId());
-                 packageName = context.getApplicationContext().getPackageName();
-                 fullName = packageName + "." + clazzName;
+                if (v instanceof TextView) {
+                    clazzName = rootView.getResources().getResourceEntryName(v.getId());
+                    packageName = context.getApplicationContext().getPackageName();
+                    fullName = packageName + "." + clazzName;
 
                     try {
-                     clazz =  Class.forName(fullName);
-                     view.setVisibility(View.VISIBLE);
-                     Intent intent = new Intent(this.context, clazz);
-                     activity.startActivity(intent);
-                    }catch (ClassNotFoundException e){
+                        clazz = Class.forName(fullName);
+                        view.setVisibility(View.VISIBLE);
+                        Intent intent = new Intent(this.context, clazz);
+                        activity.startActivity(intent);
+                    } catch (ClassNotFoundException e) {
                         Log.v("Class not found", e.getMessage());
                         Toast toast = Toast.makeText(this.context, "Activity Not Found -> Errorin: D ragListener", Toast.LENGTH_SHORT);
                         toast.show();
+                        tts.onDestroy();
                         Intent intent = new Intent(this.context, this.context.getClass());
                         activity.startActivity(intent);
                     }
@@ -104,46 +124,5 @@ public class DragListener implements View.OnDragListener, TextToSpeech.OnInitLis
                 break;
         }
         return true;
-    }
-
-
-    public void destroyTts() {
-        // Don't forget to shutdown tts!
-        if (tts != null) {
-            tts.stop();
-            tts.shutdown();
-        }
-    }
-
-    @Override //Override from TTS
-    public void onInit(int status) {
-
-        if (status == TextToSpeech.SUCCESS) {
-
-            int result = tts.setLanguage(Locale.US);
-
-            if (result == TextToSpeech.LANG_MISSING_DATA
-                    || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e("TTS", "This Language is not supported");
-            } else {
-                firstUseOfApp();
-            }
-
-        } else {
-            Log.e("TTS", "Initilization Failed!");
-        }
-
-    }
-
-    private void firstUseOfApp() {
-       // String text = txtText.getText().toString();
-        String text = Messages.textToSpeecInitialized;
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-    }
-
-    private void speakOut(String text) {
-
-        // String text = txtText.getText().toString();
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 }
