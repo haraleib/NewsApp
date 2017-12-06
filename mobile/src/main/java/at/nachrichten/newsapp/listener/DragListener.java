@@ -12,7 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-import at.nachrichten.newsapp.textToSpeech.TextToSpeechExtended;
+
+import at.nachrichten.newsapp.textToSpeech.Speak;
 
 import java.util.Locale;
 
@@ -28,7 +29,7 @@ public class DragListener implements View.OnDragListener {
     private Context context;
     private Drawable enterShape;
     private Drawable normalShape;
-    private TextToSpeechExtended tts;
+    private Speak sp;
     private final int NO_TEXT_VIEW_ID = 0;
 
     public DragListener(Context context, @DrawableRes int RDrawableResource, @DrawableRes int RDrawableResourceNormalShape) {
@@ -36,25 +37,7 @@ public class DragListener implements View.OnDragListener {
         this.context = context;
         this.enterShape = context.getDrawable(RDrawableResource);
         this.normalShape = context.getDrawable(RDrawableResourceNormalShape);
-        this.tts = new TextToSpeechExtended(context, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.SUCCESS) {
-
-                    int result = tts.setLanguage(Locale.US);
-
-                    if (result == TextToSpeech.LANG_MISSING_DATA
-                            || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "This Language is not supported");
-                    } else {
-                        tts.firstUseOfApp();
-                    }
-
-                } else {
-                    Log.e("TTS", "Initilization Failed!");
-                }
-            }
-        });
+        this.sp = new Speak(context);
     }
 
     public DragListener(Context context, @DrawableRes int RDrawableResource, @DrawableRes int RDrawableResourceNormalShape, TextToSpeech tts) {
@@ -62,7 +45,6 @@ public class DragListener implements View.OnDragListener {
         this.context = context;
         this.enterShape = context.getDrawable(RDrawableResource);
         this.normalShape = context.getDrawable(RDrawableResourceNormalShape);
-        //   this.tts = tts;
     }
 
     public boolean onDrag(View v, DragEvent event) {
@@ -81,7 +63,7 @@ public class DragListener implements View.OnDragListener {
                     if (id != NO_TEXT_VIEW_ID && rootView.findViewById(id) instanceof TextView) {
                         TextView tv = (TextView) rootView.findViewById(id);
                         String readTextView = tv.getText().toString();
-                        tts.speakOut(readTextView);
+                        sp.speak(readTextView);
                     }
                 }
 
@@ -101,8 +83,8 @@ public class DragListener implements View.OnDragListener {
                 if (v instanceof TextView) {
                     clazzName = rootView.getResources().getResourceEntryName(v.getId());
                     packageName = context.getApplicationContext().getPackageName();
-                    fullName = packageName + "." + clazzName;
-
+                    fullName =  packageName + "." + clazzName;
+                    sp.onDestroy();
                     try {
                         clazz = Class.forName(fullName);
                         view.setVisibility(View.VISIBLE);
@@ -112,7 +94,6 @@ public class DragListener implements View.OnDragListener {
                         Log.v("Class not found", e.getMessage());
                         Toast toast = Toast.makeText(this.context, "Activity Not Found -> Errorin: D ragListener", Toast.LENGTH_SHORT);
                         toast.show();
-                        tts.onDestroy();
                         Intent intent = new Intent(this.context, this.context.getClass());
                         activity.startActivity(intent);
                     }

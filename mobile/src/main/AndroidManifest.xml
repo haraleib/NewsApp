@@ -23,6 +23,12 @@
         <activity
             android:name=".Login"
             android:label="@string/title_activity_login_register"></activity>
-    </application>
 
+        <service
+            android:name="Speak"
+            android:icon="@drawable/icon"
+            android:label="@string/service_name"
+            >
+        </service>
+    </application>
 </manifest>
