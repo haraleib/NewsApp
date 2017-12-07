@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.GestureDetector;
 
-import at.nachrichten.newsapp.async.Newsfetcher;
+import at.nachrichten.newsapp.async.TickerHandler;
 import at.nachrichten.newsapp.listener.DragListenerHome;
 import at.nachrichten.newsapp.listener.TouchListener;
 
@@ -22,7 +22,7 @@ public class Home extends Activity {
         setContentView(R.layout.activity_home);
 
         /*Load content for ticker in own thread*/
-        new Newsfetcher().execute();
+        new TickerHandler().execute();
 
         /*Initialize Listeners*/
         DragListenerHome dragListener = new DragListenerHome(Home.this, R.drawable.shape_droptarget, R.drawable.home_screen_border);

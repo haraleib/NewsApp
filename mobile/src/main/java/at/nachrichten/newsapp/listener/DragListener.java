@@ -42,7 +42,6 @@ import at.nachrichten.newsapp.async.Speak;
 
 public abstract class DragListener implements View.OnDragListener {
 
-
     private Activity activity;
     private Context context;
     private Speak sp;

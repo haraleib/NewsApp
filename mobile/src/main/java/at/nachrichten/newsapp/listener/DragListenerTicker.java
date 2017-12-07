@@ -1,14 +1,16 @@
 package at.nachrichten.newsapp.listener;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import at.nachrichten.newsapp.TickerFullArticle;
+import at.nachrichten.newsapp.async.TickerarticleHandler;
 
 /**
  * Created by Harald on 07.12.2017.
@@ -30,47 +32,30 @@ public class DragListenerTicker extends DragListener {
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
                 v.setBackgroundColor(Color.WHITE);
-
-                if (rootView.findViewById(v.getId()) != null) {
-                    String textViewName = rootView.getResources().getResourceEntryName(v.getId());
-                    int id = getContext().getResources().getIdentifier(textViewName, "id", getContext().getPackageName());
-                    if (id != getNO_TEXT_VIEW_ID() && rootView.findViewById(id) instanceof TextView) {
-                        TextView tv = (TextView) rootView.findViewById(id);
-                        final String readTextView = tv.getText().toString();
-                        getSp().speak(readTextView);
-                    }
-
-                    break;
+                if (v instanceof TextView && v != null) {
+                    TextView tv = (TextView) v;
+                    final String readTextView = tv.getText().toString();
+                    getSp().speak(readTextView);
                 }
+                break;
             case DragEvent.ACTION_DRAG_EXITED:
-                v.setBackgroundColor(Color.DKGRAY);
+                v.setBackgroundColor(Color.WHITE);
                 break;
             case DragEvent.ACTION_DROP:
-                String clazzName = " ";
-                String packageName = " ";
-                String fullName = " ";
-                Class clazz = null;
 
                 View view = (View) event.getLocalState(); //ImageView
                 ViewGroup owner = (ViewGroup) view.getParent(); //FrameLayout
-
+    //if home/back dann dort hin. wenn in Tickerfullarticle dann nicht mehr machen bei content drop. instance of tickerfullarticle
                 if (v instanceof TextView) {
-                    clazzName = rootView.getResources().getResourceEntryName(v.getId());
-                    packageName = context.getApplicationContext().getPackageName();
-                    fullName = packageName + "." + clazzName;
+                    String key = ((TextView) v).getText().toString();
+
+                    TickerarticleHandler.setUpCorrectLink(key);
+                    new TickerarticleHandler().execute();
                     getSp().onDestroy();
-                    try {
-                        clazz = Class.forName(fullName);
-                        //   view.setVisibility(View.VISIBLE);
-                        Intent intent = new Intent(getContext(), clazz);
+
+                        Intent intent = new Intent(getContext(), TickerFullArticle.class);
                         getActivity().startActivity(intent);
-                    } catch (ClassNotFoundException e) {
-                        Log.v("Class not found", e.getMessage());
-                        Toast toast = Toast.makeText(getContext(), "Activity Not Found -> Errorin: D ragListener", Toast.LENGTH_SHORT);
-                        toast.show();
-                        Intent intent = new Intent(getContext(), getContext().getClass());
-                        getActivity().startActivity(intent);
-                    }
+
                     view.setVisibility(View.VISIBLE);
                 }
                 break;

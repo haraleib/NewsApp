@@ -8,4 +8,5 @@ public class Messages {
     public static final String LOG_TAG_SPEAK = "SPEAK";
     public static final String LOG_TAG_TouchListener = "TouchListener";
     public static final String LOG_TAG_GestureListener = "GestureListener";
+    public static final String TICKER_TIME = "Artikel gepostet um: ";
 }
