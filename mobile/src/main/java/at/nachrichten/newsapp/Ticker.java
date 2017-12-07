@@ -3,6 +3,7 @@ package at.nachrichten.newsapp;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,18 +23,18 @@ import at.nachrichten.newsapp.listener.TouchListener;
 public class Ticker extends Activity {
     /** Called when the activity is first created. */
     private GestureDetector mDetector;
+    Elements links=  Newsfetcher.getLinksTag();
+    List<String> linkText = Newsfetcher.getLinksValue();
+    Elements desc = Newsfetcher.getHeadlineTag();
+    List<String> text = Newsfetcher.getHeadlineText();
+    Elements time = Newsfetcher.getTimeTag();
+    List<String> timetext = Newsfetcher.getTimeText();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticker);
-
-      Elements links=  Newsfetcher.getLinksTag();
-      List<String> linkText = Newsfetcher.getLinksValue();
-      Elements desc = Newsfetcher.getHeadlineTag();
-      Elements time = Newsfetcher.getTimeTag();
-      List<String> text = Newsfetcher.getHeadlineText();
-      List<String> timetext = Newsfetcher.getTimeText();
 
         /*Initialize Listeners*/
         DragListenerTicker dragListener = new DragListenerTicker(Ticker.this);
@@ -45,11 +46,22 @@ public class Ticker extends Activity {
         findViewById(R.id.Home).setOnDragListener(dragListener);
         findViewById(R.id.textView).setOnDragListener(dragListener);
 
-        LinearLayout l = (LinearLayout)findViewById(R.id.content);
-        TextView tv = new TextView(Ticker.this);
-        CharSequence cs = "asdfasdfasfasdf";
-        tv.setText(cs);
-        l.addView(tv);
+        createNewsFed();
+    }
 
+    private void createNewsFed() {
+        TextView tv;
+        LinearLayout l = (LinearLayout)findViewById(R.id.content);
+
+        while(text.iterator().hasNext()) {
+            tv = new TextView(Ticker.this);
+            tv = (TextView) findViewById(R.id.textView);
+            if(tv.getParent() != null)
+            ((ViewGroup) tv.getParent()).removeView(tv);
+            CharSequence cs = text.iterator().next();
+            tv.setText(cs);
+            l.addView(tv);
+            break;
+        }
     }
 }
