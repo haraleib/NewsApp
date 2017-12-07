@@ -78,7 +78,7 @@ public class TouchListener implements View.OnTouchListener {
 }
 
 class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
+    //TODO: gesture handling. swipes, intro etc
     private TouchListener currTouchListener;
     private Speak speak;
     private static final int SWIPE_THRESHOLD = 100;

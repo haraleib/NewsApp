@@ -20,7 +20,9 @@ public class Home extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        //TODO: exception handling full project
+        //TODO: aktivities von einer abstrakten oberaktivity ableiten
+        //TODO: set up news
         /*Load content for ticker in own thread*/
         new TickerHandler().execute();
 

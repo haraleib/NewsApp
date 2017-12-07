@@ -45,7 +45,7 @@ public class DragListenerTicker extends DragListener {
 
                 View view = (View) event.getLocalState(); //ImageView
                 ViewGroup owner = (ViewGroup) view.getParent(); //FrameLayout
-    //if home/back dann dort hin. wenn in Tickerfullarticle dann nicht mehr machen bei content drop. instance of tickerfullarticle
+    //TODO: if home/back dann dort hin. wenn in Tickerfullarticle dann nicht mehr machen bei content drop. instance of tickerfullarticle
                 if (v instanceof TextView) {
                     String key = ((TextView) v).getText().toString();
 

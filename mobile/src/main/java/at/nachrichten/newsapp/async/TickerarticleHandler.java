@@ -25,6 +25,7 @@ public class TickerarticleHandler extends TickerHandler {
     public TickerarticleHandler(){
 
     }
+    //TODO: correct search statements and exception handling if nothing found
     @Override
     protected String doInBackground(String... strings) {
         fetched = false;
