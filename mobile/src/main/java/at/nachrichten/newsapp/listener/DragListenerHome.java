@@ -1,25 +1,5 @@
 package at.nachrichten.newsapp.listener;
 
-/**
- * Created by Harald on 07.12.2017.
- */
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.speech.tts.TextToSpeech;
-import android.support.annotation.DrawableRes;
-import android.util.Log;
-import android.view.DragEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import at.nachrichten.newsapp.async.Speak;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -40,40 +20,31 @@ import at.nachrichten.newsapp.async.Speak;
  * Created by hei on 20.10.2017.
  */
 
-public abstract class DragListener implements View.OnDragListener {
-
+public class DragListenerHome extends DragListener {
 
     private Activity activity;
     private Context context;
+    private Drawable enterShape;
+    private Drawable normalShape;
     private Speak sp;
     private final int NO_TEXT_VIEW_ID = 0;
 
-    public DragListener(){
-
-    }
-
-    public DragListener(Context context) {
+    public DragListenerHome(Context context, @DrawableRes int RDrawableResource, @DrawableRes int RDrawableResourceNormalShape) {
         this.activity = (Activity) context;
         this.context = context;
+        this.enterShape = context.getDrawable(RDrawableResource);
+        this.normalShape = context.getDrawable(RDrawableResourceNormalShape);
         this.sp = new Speak(context);
     }
 
-    public Activity getActivity() {
-        return activity;
+    public DragListenerHome(Context context, @DrawableRes int RDrawableResource, @DrawableRes int RDrawableResourceNormalShape, TextToSpeech tts) {
+        this.activity = (Activity) context;
+        this.context = context;
+        this.enterShape = context.getDrawable(RDrawableResource);
+        this.normalShape = context.getDrawable(RDrawableResourceNormalShape);
     }
 
-    public Context getContext() {
-        return context;
-    }
-
-    public Speak getSp() {
-        return sp;
-    }
-
-    public int getNO_TEXT_VIEW_ID() {
-        return NO_TEXT_VIEW_ID;
-    }
-
+    @Override
     public boolean onDrag(View v, DragEvent event) {
         int action = event.getAction();
         View rootView = activity.findViewById(android.R.id.content);
@@ -82,7 +53,7 @@ public abstract class DragListener implements View.OnDragListener {
             case DragEvent.ACTION_DRAG_STARTED:
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
-                v.setBackgroundColor(Color.GRAY);
+                v.setBackground(enterShape);
 
                 if (rootView.findViewById(v.getId()) != null) {
                     String textViewName = rootView.getResources().getResourceEntryName(v.getId());
@@ -135,4 +106,3 @@ public abstract class DragListener implements View.OnDragListener {
         return true;
     }
 }
-

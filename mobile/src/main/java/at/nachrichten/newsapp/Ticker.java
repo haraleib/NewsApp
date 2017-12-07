@@ -3,6 +3,8 @@ package at.nachrichten.newsapp;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.GestureDetector;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.jsoup.select.Elements;
 
@@ -10,6 +12,7 @@ import java.util.List;
 
 import at.nachrichten.newsapp.async.Newsfetcher;
 import at.nachrichten.newsapp.listener.DragListener;
+import at.nachrichten.newsapp.listener.DragListenerTicker;
 import at.nachrichten.newsapp.listener.TouchListener;
 
 /**
@@ -23,7 +26,7 @@ public class Ticker extends Activity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_ticker);
 
       Elements links=  Newsfetcher.getLinksTag();
       List<String> linkText = Newsfetcher.getLinksValue();
@@ -33,14 +36,20 @@ public class Ticker extends Activity {
       List<String> timetext = Newsfetcher.getTimeText();
 
         /*Initialize Listeners*/
-        DragListener dragListener = new DragListener(Ticker.this, R.drawable.shape_droptarget, R.drawable.shape);
+        DragListenerTicker dragListener = new DragListenerTicker(Ticker.this);
         TouchListener touchListener = new TouchListener(Ticker.this);
         /*Set Listeners*/
         findViewById(R.id.navigationComponent).setOnTouchListener(touchListener);
 
-       // findViewById(R.id.Login).setOnDragListener(dragListener);
-        findViewById(R.id.News).setOnDragListener(dragListener);
-        findViewById(R.id.Register).setOnDragListener(dragListener);
-        findViewById(R.id.Ticker).setOnDragListener(dragListener);
+        findViewById(R.id.scrollView).setOnDragListener(dragListener);
+        findViewById(R.id.Home).setOnDragListener(dragListener);
+        findViewById(R.id.textView).setOnDragListener(dragListener);
+
+        LinearLayout l = (LinearLayout)findViewById(R.id.content);
+        TextView tv = new TextView(Ticker.this);
+        CharSequence cs = "asdfasdfasfasdf";
+        tv.setText(cs);
+        l.addView(tv);
+
     }
 }

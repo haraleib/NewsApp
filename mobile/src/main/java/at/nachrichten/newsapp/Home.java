@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 
 import at.nachrichten.newsapp.async.Newsfetcher;
-import at.nachrichten.newsapp.listener.DragListener;
+import at.nachrichten.newsapp.listener.DragListenerHome;
 import at.nachrichten.newsapp.listener.TouchListener;
 
 
@@ -25,7 +25,7 @@ public class Home extends Activity {
         new Newsfetcher().execute();
 
         /*Initialize Listeners*/
-        DragListener dragListener = new DragListener(Home.this, R.drawable.shape_droptarget, R.drawable.shape);
+        DragListenerHome dragListener = new DragListenerHome(Home.this, R.drawable.shape_droptarget, R.drawable.home_screen_border);
         TouchListener touchListener = new TouchListener(Home.this);
         /*Set Listeners*/
         findViewById(R.id.navigationComponent).setOnTouchListener(touchListener);
