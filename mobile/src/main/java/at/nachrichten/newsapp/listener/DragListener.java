@@ -3,6 +3,7 @@ package at.nachrichten.newsapp.listener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.DrawableRes;
@@ -13,11 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import at.nachrichten.newsapp.textToSpeech.Speak;
-
-import java.util.Locale;
-
-import at.nachrichten.newsapp.Messages;
+import at.nachrichten.newsapp.async.Speak;
 
 /**
  * Created by hei on 20.10.2017.
@@ -62,14 +59,15 @@ public class DragListener implements View.OnDragListener {
                     int id = this.context.getResources().getIdentifier(textViewName, "id", this.context.getPackageName());
                     if (id != NO_TEXT_VIEW_ID && rootView.findViewById(id) instanceof TextView) {
                         TextView tv = (TextView) rootView.findViewById(id);
-                        String readTextView = tv.getText().toString();
+                        final String readTextView = tv.getText().toString();
                         sp.speak(readTextView);
-                    }
-                }
 
-                break;
+                    }
+
+                    break;
+                }
             case DragEvent.ACTION_DRAG_EXITED:
-                v.setBackground(normalShape);
+                v.setBackgroundColor(Color.DKGRAY);
                 break;
             case DragEvent.ACTION_DROP:
                 String clazzName = " ";
@@ -83,11 +81,11 @@ public class DragListener implements View.OnDragListener {
                 if (v instanceof TextView) {
                     clazzName = rootView.getResources().getResourceEntryName(v.getId());
                     packageName = context.getApplicationContext().getPackageName();
-                    fullName =  packageName + "." + clazzName;
+                    fullName = packageName + "." + clazzName;
                     sp.onDestroy();
                     try {
                         clazz = Class.forName(fullName);
-                        view.setVisibility(View.VISIBLE);
+                        //   view.setVisibility(View.VISIBLE);
                         Intent intent = new Intent(this.context, clazz);
                         activity.startActivity(intent);
                     } catch (ClassNotFoundException e) {
@@ -97,10 +95,11 @@ public class DragListener implements View.OnDragListener {
                         Intent intent = new Intent(this.context, this.context.getClass());
                         activity.startActivity(intent);
                     }
+                    view.setVisibility(View.VISIBLE);
                 }
                 break;
             case DragEvent.ACTION_DRAG_ENDED:
-                v.setBackground(normalShape);
+                v.setBackgroundColor(Color.DKGRAY);
             default:
                 break;
         }

@@ -1,13 +1,21 @@
 <resources>
     <string name="title_activity_login_register">Sign in</string>
-    <!-- Strings related to homeScreen -->
+    <!-- Strings related to Home -->
     <string name="login_text">Login</string>
     <string name="news_text">News</string>
     <string name="register_text">Register</string>
-    <string name="empty_text">Empty</string>
+    <string name="ticker_text">Ticker</string>
     <string name="drop_component">Drop Component</string>
     <string name="reg">Drop Component</string>
-    <!-- Strings related to login -->
+    <string name="app_first_use">Welcome to NewsApp: If you want a short introduction, touch the middle of the screen and swipe right</string>
+    <string name="introduction"> You control the application with a component located in the middle of the screen:
+                                    Touch component and swipe right: Intro
+                                    If you press the component twice, you will come to the homescreen
+    </string>
+    <!-- Strings related to Speak -->
+    <!-- Strings related to TouchListener -->
+    <string name="change_to_home">Home</string>
+    <!-- Strings related to Login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>

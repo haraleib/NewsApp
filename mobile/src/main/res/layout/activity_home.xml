@@ -54,24 +54,24 @@
                 android:text="@string/register_text" />
 
             <TextView
-                android:id="@+id/Empty"
+                android:id="@+id/Ticker"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1.0"
                 android:textAlignment="center"
                 android:background="@android:color/holo_red_light"
-                android:text="@string/empty_text" />
+                android:text="@string/ticker_text" />
 
         </LinearLayout>
     </LinearLayout>
 
     <ImageView
         android:id="@+id/navigationComponent"
-        android:layout_width="82dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:layout_gravity="center"
         android:layout_marginBottom="37dp"
-        android:src="@drawable/ic_launcher"
+        android:src="@drawable/navigation_component"
         android:visibility="visible"
         android:contentDescription="@string/drop_component"/>
 
